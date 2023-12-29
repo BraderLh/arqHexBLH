@@ -9,6 +9,6 @@ import java.io.Serializable;
 @Getter
 @Setter
 public class FacturaDetalleEntityId implements Serializable {
-    private Long facturaCabeceraEntity;
-    private Long productoEntity;
+    private Long facturaCabecera;
+    private Long producto;
 }

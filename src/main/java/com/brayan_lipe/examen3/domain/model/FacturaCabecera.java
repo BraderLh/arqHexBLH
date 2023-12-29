@@ -16,6 +16,7 @@ public class FacturaCabecera {
     private Date fechaEmision;
     private Double total;
 
+
     public FacturaCabecera(Long id, String clienteNombre, String clienteNumeroDoc, Date fechaEmision, Double total) {
         this.id = id;
         this.clienteNombre = clienteNombre;
