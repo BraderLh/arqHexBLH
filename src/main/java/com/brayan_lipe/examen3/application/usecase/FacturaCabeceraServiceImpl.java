@@ -4,6 +4,7 @@ import com.brayan_lipe.examen3.domain.model.FacturaCabecera;
 import com.brayan_lipe.examen3.domain.ports.in.FacturaCabeceraIn;
 import com.brayan_lipe.examen3.domain.ports.out.FacturaCabeceraOut;
 
+import java.util.List;
 import java.util.Optional;
 
 public class FacturaCabeceraServiceImpl implements FacturaCabeceraIn {
@@ -11,6 +12,11 @@ public class FacturaCabeceraServiceImpl implements FacturaCabeceraIn {
 
     public FacturaCabeceraServiceImpl(FacturaCabeceraOut facturaCabeceraOut) {
         this.facturaCabeceraOut = facturaCabeceraOut;
+    }
+
+    @Override
+    public List<FacturaCabecera> getAll() {
+        return facturaCabeceraOut.getAll();
     }
 
     @Override

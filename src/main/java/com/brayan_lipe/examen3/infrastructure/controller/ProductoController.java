@@ -6,8 +6,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("api/v1/producto")
+@RequestMapping("api/producto")
 public class ProductoController {
     private final ProductoService productoService;
 
@@ -19,6 +21,12 @@ public class ProductoController {
     public ResponseEntity<Producto> create(@RequestBody Producto producto) {
         Producto producto1 = productoService.create(producto);
         return new ResponseEntity<>(producto1, HttpStatus.CREATED);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Producto>> getProductos() {
+        List<Producto> productos = productoService.getAll();
+        return new ResponseEntity<>(productos, HttpStatus.OK);
     }
 
     @GetMapping("/{productoId}")
@@ -36,11 +44,11 @@ public class ProductoController {
     }
 
     @DeleteMapping("/{productoId}")
-    public ResponseEntity<Void> deleteProductoById(@PathVariable Long productoId) {
+    public ResponseEntity<String> deleteProductoById(@PathVariable Long productoId) {
         if (productoService.deleteById(productoId)) {
-            return new ResponseEntity<>(HttpStatus.ACCEPTED);
+            return new ResponseEntity<>("Eliminación satisfactoria", HttpStatus.ACCEPTED);
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Eliminación fallida", HttpStatus.NOT_FOUND);
         }
     }
 }

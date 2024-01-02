@@ -1,15 +1,15 @@
 package com.brayan_lipe.examen3.infrastructure.controller;
 
 import com.brayan_lipe.examen3.application.service.FacturaCabeceraService;
-import com.brayan_lipe.examen3.application.service.ProductoService;
 import com.brayan_lipe.examen3.domain.model.FacturaCabecera;
-import com.brayan_lipe.examen3.domain.model.FacturaDetalle;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("api/v1/facturacabecera")
+@RequestMapping("api/facturacabecera")
 public class FacturaCabeceraController {
     private final FacturaCabeceraService facturaCabeceraService;
 
@@ -18,13 +18,18 @@ public class FacturaCabeceraController {
     }
 
     @PostMapping
-    public ResponseEntity<FacturaCabecera> create(@RequestBody FacturaCabecera facturaCabecera) {
+    public ResponseEntity<FacturaCabecera> createFacturaCabecera(@RequestBody FacturaCabecera facturaCabecera) {
         FacturaCabecera facturaCabecera1 = facturaCabeceraService.create(facturaCabecera);
         return new ResponseEntity<>(facturaCabecera1, HttpStatus.CREATED);
     }
 
+    @GetMapping
+    public ResponseEntity<List<FacturaCabecera>> getFacturaCabeceras() {
+        return new ResponseEntity<>(facturaCabeceraService.getAll(), HttpStatus.OK);
+    }
+
     @GetMapping("/{facturaId}")
-    public ResponseEntity<FacturaCabecera> getFacturaCabeceraById(@PathVariable Long facturaId){
+    public ResponseEntity<FacturaCabecera> getFacturaCabeceraById(@PathVariable Long facturaId) {
         return facturaCabeceraService.getById(facturaId)
                 .map(facturaCabecera -> new ResponseEntity<>(facturaCabecera, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
@@ -38,11 +43,11 @@ public class FacturaCabeceraController {
     }
 
     @DeleteMapping("/{facturaId}")
-    public ResponseEntity<Void> deleteFacturaCabeceraById(@PathVariable Long facturaId) {
+    public ResponseEntity<String> deleteFacturaCabeceraById(@PathVariable Long facturaId) {
         if (facturaCabeceraService.deleteById(facturaId)) {
-            return new ResponseEntity<>(HttpStatus.ACCEPTED);
+            return new ResponseEntity<>("Eliminación satisfactoria", HttpStatus.ACCEPTED);
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Eliminación fallida", HttpStatus.NOT_FOUND);
         }
     }
 }

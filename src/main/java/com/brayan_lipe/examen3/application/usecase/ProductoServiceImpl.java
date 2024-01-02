@@ -4,6 +4,7 @@ import com.brayan_lipe.examen3.domain.model.Producto;
 import com.brayan_lipe.examen3.domain.ports.in.ProductoIn;
 import com.brayan_lipe.examen3.domain.ports.out.ProductoOut;
 
+import java.util.List;
 import java.util.Optional;
 
 public class ProductoServiceImpl implements ProductoIn {
@@ -11,6 +12,11 @@ public class ProductoServiceImpl implements ProductoIn {
 
     public ProductoServiceImpl(ProductoOut productoOut) {
         this.productoOut = productoOut;
+    }
+
+    @Override
+    public List<Producto> getAll() {
+        return productoOut.getAll();
     }
 
     @Override
@@ -25,7 +31,7 @@ public class ProductoServiceImpl implements ProductoIn {
 
     @Override
     public Optional<Producto> updateById(Long id, Producto producto) {
-        return productoOut.getById(id);
+        return productoOut.updateById(id, producto);
     }
 
     @Override

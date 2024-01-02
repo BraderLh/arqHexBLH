@@ -1,14 +1,12 @@
 package com.brayan_lipe.examen3.domain.model;
 
-import com.brayan_lipe.examen3.infrastructure.entity.FacturaCabeceraEntity;
-import com.brayan_lipe.examen3.infrastructure.entity.ProductoEntity;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Setter
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
+@ToString
 public class FacturaDetalle {
     private Long id;
     private FacturaCabecera facturaCabecera;
@@ -17,12 +15,7 @@ public class FacturaDetalle {
     private Double precioUnitario;
     private Double subtotal;
 
-    public FacturaDetalle(Long id, FacturaCabecera facturaCabecera, Producto producto, int cantidad, Double precioUnitario, Double subtotal) {
-        this.id = id;
-        this.facturaCabecera = facturaCabecera;
-        this.producto = producto;
-        this.cantidad = cantidad;
-        this.precioUnitario = precioUnitario;
-        this.subtotal = subtotal;
+    public Double calcularSubtotal(double cantidad, double precioUnitario) {
+        return cantidad*precioUnitario;
     }
 }

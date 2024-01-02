@@ -3,6 +3,7 @@ package com.brayan_lipe.examen3.application.service;
 import com.brayan_lipe.examen3.domain.model.Producto;
 import com.brayan_lipe.examen3.domain.ports.in.ProductoIn;
 
+import java.util.List;
 import java.util.Optional;
 
 public class ProductoService implements ProductoIn {
@@ -10,6 +11,11 @@ public class ProductoService implements ProductoIn {
 
     public ProductoService(ProductoIn productoIn) {
         this.productoIn = productoIn;
+    }
+
+    @Override
+    public List<Producto> getAll() {
+        return productoIn.getAll();
     }
 
     @Override
