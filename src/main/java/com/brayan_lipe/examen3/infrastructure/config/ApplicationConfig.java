@@ -39,8 +39,8 @@ public class ApplicationConfig {
     }
 
     @Bean
-    public FacturaDetalleService facturaDetalleService(FacturaDetalleOut facturaDetalleOut) {
-        return new FacturaDetalleService(new FacturaDetalleServiceImpl(facturaDetalleOut));
+    public FacturaDetalleService facturaDetalleService(FacturaDetalleOut facturaDetalleOut, FacturaCabeceraOut facturaCabeceraOut, ProductoOut productoOut) {
+        return new FacturaDetalleService(new FacturaDetalleServiceImpl(facturaDetalleOut), new FacturaCabeceraServiceImpl(facturaCabeceraOut), new ProductoServiceImpl(productoOut));
     }
 
     @Bean

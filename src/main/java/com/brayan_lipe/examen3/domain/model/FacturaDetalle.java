@@ -10,7 +10,7 @@ import lombok.*;
 public class FacturaDetalle {
     private Long id;
     private FacturaCabecera facturaCabecera;
-    private Producto producto;
+    private Producto productos;
     private int cantidad;
     private Double precioUnitario;
     private Double subtotal;

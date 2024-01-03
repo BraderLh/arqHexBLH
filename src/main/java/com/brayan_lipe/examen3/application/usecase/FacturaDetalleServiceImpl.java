@@ -1,16 +1,24 @@
 package com.brayan_lipe.examen3.application.usecase;
 
+import com.brayan_lipe.examen3.domain.model.FacturaCabecera;
 import com.brayan_lipe.examen3.domain.model.FacturaDetalle;
+import com.brayan_lipe.examen3.domain.model.Producto;
 import com.brayan_lipe.examen3.domain.ports.in.FacturaDetalleIn;
+import com.brayan_lipe.examen3.domain.ports.out.FacturaCabeceraOut;
 import com.brayan_lipe.examen3.domain.ports.out.FacturaDetalleOut;
 
+import java.util.List;
 import java.util.Optional;
 
 public class FacturaDetalleServiceImpl implements FacturaDetalleIn {
     private final FacturaDetalleOut facturaDetalleOut;
-
     public FacturaDetalleServiceImpl(FacturaDetalleOut facturaDetalleOut) {
         this.facturaDetalleOut = facturaDetalleOut;
+    }
+
+    @Override
+    public List<FacturaDetalle> getAll() {
+        return facturaDetalleOut.getAll();
     }
 
     @Override
@@ -31,5 +39,15 @@ public class FacturaDetalleServiceImpl implements FacturaDetalleIn {
     @Override
     public boolean deleteById(Long id) {
         return facturaDetalleOut.deleteById(id);
+    }
+
+    @Override
+    public List<FacturaCabecera> getFacturasCabeceraById(Long id) {
+        return facturaDetalleOut.getFacturasCabeceraById(id);
+    }
+
+    @Override
+    public Double calculateTotalById(Long id) {
+        return facturaDetalleOut.calculateTotalById(id);
     }
 }

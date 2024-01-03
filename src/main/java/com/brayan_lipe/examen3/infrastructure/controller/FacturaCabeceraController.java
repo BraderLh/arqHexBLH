@@ -1,20 +1,24 @@
 package com.brayan_lipe.examen3.infrastructure.controller;
 
 import com.brayan_lipe.examen3.application.service.FacturaCabeceraService;
+import com.brayan_lipe.examen3.application.service.FacturaDetalleService;
 import com.brayan_lipe.examen3.domain.model.FacturaCabecera;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("api/facturacabecera")
 public class FacturaCabeceraController {
     private final FacturaCabeceraService facturaCabeceraService;
+    private final FacturaDetalleService facturaDetalleService;
 
-    public FacturaCabeceraController(FacturaCabeceraService facturaCabeceraService) {
+    public FacturaCabeceraController(FacturaCabeceraService facturaCabeceraService, FacturaDetalleService facturaDetalleService) {
         this.facturaCabeceraService = facturaCabeceraService;
+        this.facturaDetalleService = facturaDetalleService;
     }
 
     @PostMapping
@@ -38,6 +42,18 @@ public class FacturaCabeceraController {
     @PutMapping("/{facturaId}")
     public ResponseEntity<FacturaCabecera> updateFacturaCabecera(@PathVariable Long facturaId, @RequestBody FacturaCabecera facturaCabecera) {
         return facturaCabeceraService.updateById(facturaId, facturaCabecera)
+                .map(facturaCabecera1 -> new ResponseEntity<>(facturaCabecera1, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @PutMapping("/getTotal/{facturaId}")
+    public ResponseEntity<FacturaCabecera> getTotalFacturaCabecera(@PathVariable Long facturaId) {
+        Optional<FacturaCabecera> facturaCabecera = facturaCabeceraService.getById(facturaId);
+        facturaCabecera.ifPresent(facturaCabecera1 -> {
+            facturaCabecera1.setTotal(facturaDetalleService.calculateTotalById(facturaId));
+        });
+        facturaCabecera.orElseThrow();
+        return facturaCabeceraService.updateById(facturaId, facturaCabecera.get())
                 .map(facturaCabecera1 -> new ResponseEntity<>(facturaCabecera1, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }

@@ -3,26 +3,41 @@ package com.brayan_lipe.examen3.infrastructure.repository.adapter;
 import com.brayan_lipe.examen3.domain.model.FacturaCabecera;
 import com.brayan_lipe.examen3.domain.ports.out.FacturaCabeceraOut;
 import com.brayan_lipe.examen3.infrastructure.entity.FacturaCabeceraEntity;
+import com.brayan_lipe.examen3.infrastructure.entity.FacturaDetalleEntity;
+import com.brayan_lipe.examen3.infrastructure.entity.ProductoEntity;
 import com.brayan_lipe.examen3.infrastructure.repository.FacturaCabeceraRepository;
+import com.brayan_lipe.examen3.infrastructure.repository.FacturaDetalleRepository;
+import com.brayan_lipe.examen3.infrastructure.repository.ProductoRepository;
 import org.springframework.stereotype.Component;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
 public class FacturaCabeceraRepositoryAdapter implements FacturaCabeceraOut {
     private final FacturaCabeceraRepository facturaCabeceraRepository;
+    private final FacturaDetalleRepository facturaDetalleRepository;
+    private final ProductoRepository productoRepository;
 
-    public FacturaCabeceraRepositoryAdapter(FacturaCabeceraRepository facturaCabeceraRepository) {
+    public FacturaCabeceraRepositoryAdapter(FacturaCabeceraRepository facturaCabeceraRepository, FacturaDetalleRepository facturaDetalleRepository, ProductoRepository productoRepository) {
         this.facturaCabeceraRepository = facturaCabeceraRepository;
+        this.facturaDetalleRepository = facturaDetalleRepository;
+        this.productoRepository = productoRepository;
     }
 
     @Override
     public List<FacturaCabecera> getAll() {
         List<FacturaCabeceraEntity> facturaCabeceraEntities = facturaCabeceraRepository.findAll();
         return facturaCabeceraEntities.stream().sorted(Comparator.comparing(FacturaCabeceraEntity::getId)).map(
+                facturaCabeceraEntity -> new FacturaCabecera(facturaCabeceraEntity.getId(), facturaCabeceraEntity.getClienteNombre(),
+                        facturaCabeceraEntity.getClienteNumeroDoc(), facturaCabeceraEntity.getFechaEmision(),
+                        facturaCabeceraEntity.getTotal())).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<FacturaCabecera> getAllById(Long id) {
+        List<FacturaCabeceraEntity> facturaCabeceraEntities = facturaCabeceraRepository.findAllById(Collections.singleton(id));
+        return  facturaCabeceraEntities.stream().sorted(Comparator.comparing(FacturaCabeceraEntity::getId)).map(
                 facturaCabeceraEntity -> new FacturaCabecera(facturaCabeceraEntity.getId(), facturaCabeceraEntity.getClienteNombre(),
                         facturaCabeceraEntity.getClienteNumeroDoc(), facturaCabeceraEntity.getFechaEmision(),
                         facturaCabeceraEntity.getTotal())).collect(Collectors.toList());
@@ -62,6 +77,7 @@ public class FacturaCabeceraRepositoryAdapter implements FacturaCabeceraOut {
                         foundFacturaCabecera.get().getTotal() : facturaCabeceraEntity.getTotal());
                 return Optional.of(facturaCabeceraRepository.save(foundFacturaCabecera.get()).toDomainModel());
             }
+            return Optional.empty();
         }
         return Optional.empty();
     }
@@ -73,5 +89,24 @@ public class FacturaCabeceraRepositoryAdapter implements FacturaCabeceraOut {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public Double calculateTotalById(Long id) {
+        Double total;
+        List<FacturaDetalleEntity> facturaDetalleEntities = facturaDetalleRepository.findAll();
+        List<Double> subTotales = new ArrayList<>();
+        Optional<FacturaCabeceraEntity> facturaCabeceraEntity = facturaCabeceraRepository.findById(id);
+        if (facturaCabeceraEntity.isPresent()) {
+            for (FacturaDetalleEntity facturaDetalleEntity : facturaDetalleEntities) {
+                if (facturaDetalleEntity.getFacturaCabeceraEntity().getId().equals(id)) {
+                    subTotales.add(facturaDetalleEntity.getSubtotal());
+                }
+            }
+            total = subTotales.stream().mapToDouble(Double::doubleValue).sum();
+            return total;
+        } else {
+            return null;
+        }
     }
 }

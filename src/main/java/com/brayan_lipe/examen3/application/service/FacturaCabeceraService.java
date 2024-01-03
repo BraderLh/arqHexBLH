@@ -19,6 +19,11 @@ public class FacturaCabeceraService implements FacturaCabeceraIn {
     }
 
     @Override
+    public List<FacturaCabecera> getAllById(Long id) {
+        return facturaCabeceraIn.getAllById(id);
+    }
+
+    @Override
     public FacturaCabecera create(FacturaCabecera facturaCabecera) {
         FacturaCabecera facturaCabecera1 = facturaCabeceraIn.create(facturaCabecera);
         return facturaCabecera1;
@@ -37,5 +42,10 @@ public class FacturaCabeceraService implements FacturaCabeceraIn {
     @Override
     public boolean deleteById(Long id) {
         return facturaCabeceraIn.deleteById(id);
+    }
+
+    @Override
+    public Double calculateTotalById(Long id) {
+        return facturaCabeceraIn.calculateTotalById(id);
     }
 }

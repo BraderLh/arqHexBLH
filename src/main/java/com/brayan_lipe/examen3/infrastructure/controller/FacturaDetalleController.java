@@ -1,6 +1,7 @@
 package com.brayan_lipe.examen3.infrastructure.controller;
 
 import com.brayan_lipe.examen3.application.service.FacturaDetalleService;
+import com.brayan_lipe.examen3.domain.model.FacturaCabecera;
 import com.brayan_lipe.examen3.domain.model.FacturaDetalle;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,8 @@ public class FacturaDetalleController {
 
     @GetMapping
     public ResponseEntity<List<FacturaDetalle>> getFacturaDetalles() {
-        return new ResponseEntity<>(facturaDetalleService.getAll(), HttpStatus.OK);
+        List<FacturaDetalle> facturaDetalleList = facturaDetalleService.getAll();
+        return new ResponseEntity<>(facturaDetalleList, HttpStatus.OK);
     }
 
     @GetMapping("/{facturaId}")
@@ -32,6 +34,18 @@ public class FacturaDetalleController {
         return facturaDetalleService.getById(facturaId)
                 .map(facturaDetalle -> new ResponseEntity<>(facturaDetalle, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @GetMapping("/getCabeceras/{facturaId}")
+    public ResponseEntity<List<FacturaCabecera>> getFacturasCabeceraById(@PathVariable Long facturaId) {
+        List<FacturaCabecera> facturaCabeceraList = facturaDetalleService.getFacturasCabeceraById(facturaId);
+        return new ResponseEntity<>(facturaCabeceraList, HttpStatus.OK);
+    }
+
+    @GetMapping("/calcularTotal/{facturaId}")
+    public ResponseEntity<Double> calculateTotalById(@PathVariable Long facturaId) {
+        Double total = facturaDetalleService.calculateTotalById(facturaId);
+        return new ResponseEntity<>(total, HttpStatus.OK);
     }
 
     @PutMapping("/{facturaId}")

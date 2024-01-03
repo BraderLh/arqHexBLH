@@ -4,7 +4,6 @@ import com.brayan_lipe.examen3.domain.model.FacturaCabecera;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
@@ -33,9 +32,8 @@ public class FacturaCabeceraEntity {
     @Column(name = "total")
     private Double total;
 
-    @OneToMany(mappedBy = "facturaCabecera", cascade = CascadeType.ALL)
-    @JsonIgnore
-    private Set<FacturaDetalleEntity> facturaDetalleEntitySet = new HashSet<>();
+    @OneToMany(mappedBy = "facturaCabeceraEntity", cascade = CascadeType.ALL)
+    private Set<FacturaDetalleEntity> facturaDetalleEntities;
 
     public FacturaCabeceraEntity() {
     }
