@@ -12,6 +12,5 @@ public interface FacturaDetalleIn {
     Optional<FacturaDetalle> getById(Long id);
     Optional<FacturaDetalle> updateById(Long id, FacturaDetalle facturaDetalle);
     boolean deleteById(Long id);
-    List<FacturaCabecera> getFacturasCabeceraById(Long id);
     Double calculateTotalById(Long id);
 }

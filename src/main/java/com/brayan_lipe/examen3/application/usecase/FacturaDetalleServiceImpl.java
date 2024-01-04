@@ -42,11 +42,6 @@ public class FacturaDetalleServiceImpl implements FacturaDetalleIn {
     }
 
     @Override
-    public List<FacturaCabecera> getFacturasCabeceraById(Long id) {
-        return facturaDetalleOut.getFacturasCabeceraById(id);
-    }
-
-    @Override
     public Double calculateTotalById(Long id) {
         return facturaDetalleOut.calculateTotalById(id);
     }

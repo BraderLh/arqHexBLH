@@ -46,6 +46,14 @@ public class FacturaDetalleService implements FacturaDetalleIn{
 
     @Override
     public Optional<FacturaDetalle> updateById(Long id, FacturaDetalle facturaDetalle) {
+        Optional<FacturaCabecera> facturaCabecera = facturaCabeceraIn.getById(facturaDetalle.getFacturaCabecera().getId());
+        Optional<Producto> producto = productoIn.getById(facturaDetalle.getProductos().getId());
+        facturaCabecera.ifPresent(facturaDetalle::setFacturaCabecera);
+        facturaCabecera.orElseThrow();
+        producto.ifPresent(facturaDetalle::setProductos);
+        producto.orElseThrow();
+        facturaDetalle.setPrecioUnitario(facturaDetalle.getProductos().getPrecio());
+        facturaDetalle.setSubtotal(facturaDetalle.calcularSubtotal(facturaDetalle.getCantidad(), facturaDetalle.getPrecioUnitario()));
         return facturaDetalleIn.updateById(id, facturaDetalle);
     }
 
@@ -54,10 +62,6 @@ public class FacturaDetalleService implements FacturaDetalleIn{
         return facturaDetalleIn.deleteById(id);
     }
 
-    @Override
-    public List<FacturaCabecera> getFacturasCabeceraById(Long id) {
-        return facturaDetalleIn.getFacturasCabeceraById(id);
-    }
 
     @Override
     public Double calculateTotalById(Long id) {

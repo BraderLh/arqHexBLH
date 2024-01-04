@@ -77,7 +77,7 @@ public class FacturaDetalleRepositoryAdapter implements FacturaDetalleOut {
                 foundFacturaDetalleEntity.get().setSubtotal(facturaDetalleEntity.getSubtotal() == null ?
                         foundFacturaDetalleEntity.get().getSubtotal() :
                         facturaDetalleEntity.getSubtotal());
-                return Optional.of(facturaDetalleRepository.save(facturaDetalleEntity).toDomainModel());
+                return Optional.of(facturaDetalleRepository.save(foundFacturaDetalleEntity.get()).toDomainModel());
             }
             return Optional.empty();
         }
@@ -91,18 +91,6 @@ public class FacturaDetalleRepositoryAdapter implements FacturaDetalleOut {
             return true;
         }
         return false;
-    }
-
-    @Override
-    public List<FacturaCabecera> getFacturasCabeceraById(Long id) {
-        List<FacturaDetalleEntity> facturaDetalleList = facturaDetalleRepository.findAll();
-        List<FacturaCabecera> facturaCabeceras = new ArrayList<>();
-        for (FacturaDetalleEntity facturaDetalleEntity : facturaDetalleList) {
-            if (facturaDetalleEntity.getFacturaCabeceraEntity().getId().equals(id)) {
-                facturaCabeceras.add(facturaDetalleEntity.getFacturaCabeceraEntity().toDomainModel());
-            }
-        }
-        return facturaCabeceras;
     }
 
     @Override

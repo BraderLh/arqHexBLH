@@ -36,12 +36,6 @@ public class FacturaDetalleController {
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @GetMapping("/getCabeceras/{facturaId}")
-    public ResponseEntity<List<FacturaCabecera>> getFacturasCabeceraById(@PathVariable Long facturaId) {
-        List<FacturaCabecera> facturaCabeceraList = facturaDetalleService.getFacturasCabeceraById(facturaId);
-        return new ResponseEntity<>(facturaCabeceraList, HttpStatus.OK);
-    }
-
     @GetMapping("/calcularTotal/{facturaId}")
     public ResponseEntity<Double> calculateTotalById(@PathVariable Long facturaId) {
         Double total = facturaDetalleService.calculateTotalById(facturaId);
